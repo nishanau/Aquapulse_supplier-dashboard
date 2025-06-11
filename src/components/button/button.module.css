@@ -1,0 +1,16 @@
+.button {
+    padding: 15px;
+    border: 1px solid #a5a5a5;
+    border-radius: 10px;
+    width: max-content;
+    background-color: #007bff;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    font-weight: bold;
+    font-size: 20px;
+}
+.button:hover {
+    transform: scale(1.1);
+    border: 2px solid rebeccapurple;
+
+}

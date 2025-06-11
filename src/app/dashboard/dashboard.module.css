@@ -1,0 +1,94 @@
+.containder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.filter {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+    margin: 20px;
+}
+
+.dashboard {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+
+    height: 100vh;
+    overflow: hidden;
+    border-top: 2px solid #acacac;
+    overflow-y: scroll;
+}
+
+.dashboardNav {
+    position: sticky;
+
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 10px;
+    border-right: 2px solid #acacac;
+    padding-top: 15px;
+    height: 100vh;
+    
+}
+
+.dashboardNavItem {
+    border-bottom: 2px solid #acacac;
+
+    width: 100%;
+    transition: transform 0.3s ease;
+    text-align: center;
+    height: 40px;
+    font-size: 18px;
+
+}
+
+.dashboardNavItem:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 10px;
+    transform: scale(1.02);
+}
+
+.dashboardContent {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+
+.orderCard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #acacac;
+    border-radius: 10px;
+}
+
+.orderDetails {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+
+
+}
+
+.orderButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-around;
+}
