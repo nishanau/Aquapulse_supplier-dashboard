@@ -58,37 +58,4 @@
     transform: scale(1.02);
 }
 
-.dashboardContent {
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 
-}
-
-.orderCard {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 20px;
-    margin: 20px;
-    border: 2px solid #acacac;
-    border-radius: 10px;
-}
-
-.orderDetails {
-    display: flex;
-    flex-direction: row;
-    gap: 50px;
-
-
-}
-
-.orderButtons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    justify-content: space-around;
-}
