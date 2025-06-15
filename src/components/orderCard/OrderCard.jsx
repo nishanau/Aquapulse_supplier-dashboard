@@ -16,7 +16,7 @@ const OrderCard = () => {
   return (
     <div className={`${styles.orderCard} ${isExpanded ? styles.expanded : styles.collapsed}`}>
       {/* Header always visible */}
-      <div className={styles.orderHeader} onClick={toggleExpand} >
+      <div className={styles.orderHeader} onClick={toggleExpand}>
         <div className={styles.orderSummary}>
           <p className={styles.orderId}>Order ID: 12345</p>
           <p className={styles.orderStatus}>Status: Pending</p>
@@ -27,7 +27,7 @@ const OrderCard = () => {
           
           aria-label={isExpanded ? "Collapse order details" : "Expand order details"}
         >
-          {isExpanded ? '▲' : '▼'}
+          {isExpanded ? "△" : "▽"}
         </button>
       </div>
 
@@ -50,9 +50,9 @@ const OrderCard = () => {
             </div>
           </div>
           <div className={styles.orderButtons}>
-            <Button background={colors.primary} name="Acknowledge" />
+            <Button background={colors.success} name="Acknowledge" />
             <Button background={colors.secondary} name="Schedule Delivery" />
-            <Button background={colors.success} name="Attach Invoice" />
+            <Button background={colors.primary} name="Attach Invoice" />
           </div>
         </>
       )}

@@ -1,81 +1,89 @@
 .orderCard {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  background-color: white;
-  
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    background-color: #39aea9;
+    color: #fff;
+
 }
+
 .orderCard:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        background-color: #297e79;
 }
 
 /* Header styling */
 .orderHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
 }
 
+
 .orderSummary {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 80px;
+
 }
 
 .orderId {
-  font-weight: bold;
-  margin: 0;
+    font-weight: bold;
+    margin: 0;
 }
 
-.orderStatus, .orderDate {
-  margin: 0;
+.orderStatus,
+.orderDate {
+    margin: 0;
 }
 
 /* Expand/collapse button */
 .expandToggle {
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: background-color 0.2s;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    color: #fff;
+    font-size: 20px;
+
 }
 
-.expandToggle:hover {
-  background-color: #f0f0f0;
-}
+
 
 /* Expandable content */
 .orderDetails {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
 }
 
 .orderButtons {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+    margin-top: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
 }
 
 /* Card states */
 .collapsed {
-  max-height: 70px;
+    max-height: 70px;
 }
 
 .expanded {
-  max-height: 800px;
+    max-height: 800px;
 }

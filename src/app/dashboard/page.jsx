@@ -4,7 +4,7 @@ import styles from "./dashboard.module.css"; // Assuming you have a CSS module f
 const Page = () => {
   return (
     <div className={styles.container}>
-      <div className={styles.filter}>filter</div>
+      
       <div className={styles.dashboard}>
         <div className={styles.dashboardNav}>
           <div className={styles.dashboardNavItem}>New Orders</div>
@@ -20,6 +20,7 @@ const Page = () => {
           <OrderCard />
           <OrderCard />
         </div>
+        <div className={styles.filter}><p>filter</p></div>
       </div>
     </div>
   );

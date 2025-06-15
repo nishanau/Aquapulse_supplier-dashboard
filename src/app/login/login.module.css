@@ -5,6 +5,9 @@
   margin-top: 200px;
   gap: 15px;
 
+  border-radius: 5px;
+  padding: 20px;
+
 }
 
 .form {
@@ -41,4 +44,38 @@
 
 .registerLink:hover {
   color: #0076fd;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translate(-6px, 2px);
+  }
+
+  40% {
+    transform: translate(6px, 2px);
+  }
+
+  60% {
+    transform: translate(-6px, 2px);
+  }
+
+  80% {
+    transform: translate(6px, 2px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.emailError,
+.passwordError {
+  animation: shake 0.5s ease-in-out;
+  border: 2px solid red;
+
+
 }

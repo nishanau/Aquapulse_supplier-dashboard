@@ -1,24 +1,26 @@
-.containder {
+.container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
+    width: 100%;
+    height: 100vh;
+
 }
 
 .filter {
+    width: 25%;
+    height: 100%;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 10px;
-    margin: 20px;
+    position: sticky;
+    top: 0;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: #e2e2e2;
 }
 
 .dashboard {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 20px;
-
     height: 100vh;
     overflow: hidden;
     border-top: 2px solid #acacac;
@@ -27,35 +29,45 @@
 
 .dashboardNav {
     position: sticky;
-
     top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    column-gap: 10px;
-    row-gap: 10px;
+
     border-right: 2px solid #acacac;
-    padding-top: 15px;
-    height: 100vh;
     
+    height: 100vh;
+    width: 30%;
+    background-color: #4f8fc0;
+    min-width: 200px;
+
 }
 
 .dashboardNavItem {
-    border-bottom: 2px solid #acacac;
-
+    border-bottom: 2px solid #ffe3b3;
     width: 100%;
     transition: transform 0.3s ease;
-    text-align: center;
-    height: 40px;
+    height: 60px;
     font-size: 18px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+;
 
 }
 
 .dashboardNavItem:hover {
-    background-color: #f0f0f0;
+    background-color: #2772ac;
     cursor: pointer;
-    border-radius: 10px;
-    transform: scale(1.02);
+    transform: scale(1.01);
 }
 
+.dashboardContent {
 
+    padding: 10px;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 80%;
+    min-width: 600px;
+}

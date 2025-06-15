@@ -15,7 +15,8 @@ body {
   max-width: 100vw;
 
   font-family: var(--font-geist-mono), sans-serif;
-
+  margin: 0;
+  padding: 0;
 }
 button {
   cursor: pointer;
