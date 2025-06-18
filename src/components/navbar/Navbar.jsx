@@ -2,9 +2,10 @@
 import styles from "./navbar.module.css";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-
+import { useEffect } from "react";
 const Navbar = () => {
-  useAuth();
+ useAuth();
+
 
   const links = [
     {
