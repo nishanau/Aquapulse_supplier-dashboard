@@ -1,5 +1,6 @@
+"use client"
 import useSWR from "swr";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const url = process.env.REACT_APP_API_URL || "http://localhost:3000/api";
 
@@ -41,17 +42,29 @@ export const handleLogin = async (email, password) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include" 
+      credentials: "include",
     });
     const data = await res.json();
-    
+    return data;
   } catch (error) {
     console.error("Login Error:", error);
   }
 };
 
+export const handleLogout = async () => {
+  try {
+    const res = await fetch(`${url}/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Logout Error:", error);
+  }
+};
+
 export const useLoadUser = () => {
-  const didRefresh = useRef(false);
   const [isOnline, setIsOnline] = useState(true);
 
   // Track online status
@@ -78,7 +91,7 @@ export const useLoadUser = () => {
     };
   }, []);
 
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, error, isLoading } = useSWR(
     `${url}/auth/me`,
     (url) =>
       fetch(url, { credentials: "include" }).then((res) => {
@@ -88,7 +101,6 @@ export const useLoadUser = () => {
           error.statusText = res.statusText;
           throw error;
         }
-        console.log("Login Response:", res.json());
         return res.json();
       }),
     {
@@ -99,42 +111,13 @@ export const useLoadUser = () => {
           console.log("Request failed - you are offline");
         }
       },
-      // When coming back online, revalidate
-      revalidateOnReconnect: true,
+      shouldRetryOnError: false, // Don't retry on errors
+      //errorRetryCount: 3, // Retry only three times
+      dedupingInterval: 10000, // Reduce duplicate requests
+      revalidateOnFocus: false, // Don't reload when tab gains focus
+      revalidateOnReconnect: true, // When coming back online, revalidate
     }
   );
-
-  // Custom logic for 401 and refresh
-  useEffect(() => {
-    const tryRefresh = async () => {
-      // Only try refresh if we're online and have a 401 error
-      if (isOnline && error?.status === 401 && !didRefresh.current) {
-        console.log("Attempting token refresh...");
-        didRefresh.current = true;
-
-        try {
-          const refreshRes = await fetch(`${url}/auth/refresh-token`, {
-            credentials: "include",
-          });
-
-          if (refreshRes.ok) {
-            console.log("Token refreshed successfully");
-            mutate();
-          } else {
-            console.log("Token refresh failed:", refreshRes.status);
-          }
-        } catch (err) {
-          if (!navigator.onLine) {
-            console.log("Refresh failed - you are offline");
-          } else {
-            console.error("Error during refresh:", err);
-          }
-        }
-      }
-    };
-
-    tryRefresh();
-  }, [error, mutate, isOnline]);
 
   return {
     user: data,

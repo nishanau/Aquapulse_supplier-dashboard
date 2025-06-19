@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import styles from "./register.module.css";
 import Button from "@/components/button/Button";

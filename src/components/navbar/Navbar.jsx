@@ -2,46 +2,84 @@
 import styles from "./navbar.module.css";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useToast } from "@/provider/ToastProvider";
+import { useRouter } from "next/navigation";
 const Navbar = () => {
- useAuth();
-
-
+  useAuth();
+  const { isAuthenticated, user, logout, isLoading } = useAuthStore();
+  const { showToast } = useToast();
+  const router = useRouter();
   const links = [
-    {
-      label: "Home",
-      href: "/",
-    },
     {
       label: "Dashboard",
       href: "/dashboard",
+      isProtected: true,
     },
     {
       label: "Profile",
       href: "/profile",
+      isProtected: true,
     },
     {
       label: "Login",
       href: "/login",
+      isProtected: false,
     },
     {
       label: "Register",
       href: "/register",
+      isProtected: false,
     },
     {
       label: "Logout",
       href: "/logout",
+      isProtected: true,
     },
   ];
+  const handleLogout = async () => {
+    const loggedOut = await logout();
+    if (loggedOut) {
+      showToast("Logged Out successfully", "success");
+      router.push("/login");
+    }
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.logo}>Logo</div>
+      <div className={styles.logo}>{user ? user.company : "Logo"}</div>
+
       <div className={styles.links}>
-        {links.map((link) => (
-          <Link href={link.href} key={link.label}>
-            {link.label}
-          </Link>
-        ))}
+        {isAuthenticated && !isLoading
+          ? links
+              .filter((link) => link.isProtected)
+              .map((link) =>
+                link.label === "Logout" ? (
+                  <Link
+                    key={link.href}
+                    href=""
+                    className={styles.link}
+                    onClick={handleLogout}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={styles.link}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )
+          : links
+              .filter((link) => !link.isProtected)
+              .map((link) => (
+                <Link key={link.href} href={link.href} className={styles.link}>
+                  {link.label}
+                </Link>
+              ))}
       </div>
     </div>
   );

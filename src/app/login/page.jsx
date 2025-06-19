@@ -6,6 +6,8 @@ import Button from "@/components/button/Button";
 import { colors } from "@/utils/colors";
 import { handleLogin } from "@/utils/apiService";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useToast } from "@/provider/ToastProvider";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
@@ -13,7 +15,9 @@ const Login = () => {
   const [emailError, setEmailError] = React.useState(false);
   const [passwordError, setPasswordError] = React.useState(false);
   const router = useRouter();
-
+  const setIsAuthenticated = useAuthStore((s) => s.setIsAuthenticated);
+  const setUser = useAuthStore((s) => s.setUser);
+  const { showToast } = useToast();
   const handleLoginClick = async () => {
     if (!email || !password || !email.includes("@") || password.length < 6) {
       if (!email || !email.includes("@")) {
@@ -26,9 +30,11 @@ const Login = () => {
       return;
     }
     const loginSuccess = await handleLogin(email, password);
-    
+
     if (loginSuccess) {
-      console.log("Login Success:", loginSuccess);
+      setIsAuthenticated(true);
+      setUser(loginSuccess.user);
+      showToast("Login successful", "success");
       // Redirect to home page or dashboard after successful login
       router.push("/dashboard");
     }
@@ -53,6 +59,11 @@ const Login = () => {
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           onAnimationEnd={() => setPasswordError(false)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleLoginClick();
+            }
+          }}
         />
 
         <Button
