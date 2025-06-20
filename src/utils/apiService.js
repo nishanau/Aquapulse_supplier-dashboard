@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import useSWR from "swr";
 import { useEffect, useState } from "react";
 
@@ -15,12 +15,12 @@ const fetcher = async (url, options = {}) => {
   return res.json();
 };
 
-export const useOrders = (token) => {
+export const useOrders = () => {
   const options = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      credentials: "include", // Include cookies for authentication
     },
   };
 
@@ -28,6 +28,9 @@ export const useOrders = (token) => {
     [`${url}/orders`, options],
     fetcher
   );
+  console.log("Data fetched from API:", data);
+  console.log("Error fetching data:", error);
+  console.log("Is loading:", isLoading);
 
   return {
     data,
