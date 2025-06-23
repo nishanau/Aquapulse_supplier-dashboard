@@ -1,15 +1,15 @@
 "use client";
 import styles from "./navbar.module.css";
 import Link from "next/link";
-import { useAuth } from "@/hooks/useAuth";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/provider/ToastProvider";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 const Navbar = () => {
-  useAuth();
   const { isAuthenticated, user, logout, isLoading } = useAuthStore();
   const { showToast } = useToast();
   const router = useRouter();
+  const pathname = usePathname();
   const links = [
     {
       label: "Dashboard",
@@ -67,7 +67,7 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={styles.link}
+                    className={`${styles.link} ${pathname === link.href ? styles.active : ""}`}
                   >
                     {link.label}
                   </Link>

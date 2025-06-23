@@ -13,13 +13,16 @@ export default function AuthWrapper({ children }) {
     <>
       {isLoading ? (
         <div className={styles.container}>
-          <Image
-            src="/logo.png"
-            alt="Loading..."
-            width={400}
-            height={200}
-            className={styles.loadingImage}
-          />
+          <div className={styles.loadingImage}>
+            <Image
+              src="/logo.png"
+              alt="Loading..."
+              width={120}
+              height={60}
+              priority
+            />
+          </div>
+          <div className={styles.loadingText}>Almost there...</div>
         </div>
       ) : (
         children

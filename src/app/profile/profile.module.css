@@ -1,0 +1,309 @@
+.profileContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.editButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background-color: #f5f5f5;
+}
+
+.activeTab {
+  border-bottom: 3px solid #3498db;
+  color: #3498db;
+}
+
+.profileContent {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.section h2 {
+  color: #2c3e50;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #7f8c8d;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.field p {
+  padding: 0.75rem;
+  margin: 0;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  min-height: 2.5rem;
+}
+
+.logoPreview {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.logoPreview img {
+  max-width: 200px;
+  max-height: 200px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.serviceArea {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.areaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.areaHeader h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.areaFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .areaFields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.removeButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.addButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.pricingTable {
+  margin-bottom: 2rem;
+}
+
+.pricingHeader {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px 4px 0 0;
+  font-weight: 600;
+}
+
+.pricingRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.pricingRow input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.metricCard {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.metricCard h3 {
+  margin-top: 0;
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 1rem 0;
+}
+
+.stars {
+  font-size: 1.2rem;
+  color: #f1c40f;
+  margin-left: 0.5rem;
+}
+
+.metricDesc {
+  color: #95a5a6;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.reviewsTitle {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.reviewsList {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.reviewCard {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.reviewerName {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.reviewRating {
+  color: #f1c40f;
+}
+
+.reviewContent {
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+.reviewDate {
+  color: #95a5a6;
+  font-size: 0.9rem;
+}
+
+.noReviews {
+  background-color: #f9f9f9;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+  color: #7f8c8d;
+}
+
+.passwordForm {
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.securityTips {
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.securityTips h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.securityTips ul {
+  padding-left: 1.5rem;
+  color: #7f8c8d;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}

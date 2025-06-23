@@ -1,0 +1,239 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #334155;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+.closeButton:hover {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.modalContent {
+  padding: 20px;
+}
+
+.modalContent p {
+  margin-top: 0;
+  color: #475569;
+}
+
+.uploadContainer {
+  margin: 20px 0;
+}
+
+.dropZone {
+  border: 2px dashed #e2e8f0;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dropZone:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.uploadIcon {
+  font-size: 24px;
+  color: #3b82f6;
+}
+
+.supportedFormats {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.selectedFile {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.fileIcon {
+  color: #3b82f6;
+  font-size: 24px;
+  margin-right: 12px;
+}
+
+.fileDetails {
+  flex: 1;
+}
+
+.fileName {
+  display: block;
+  font-weight: 500;
+  color: #334155;
+  word-break: break-all;
+}
+
+.fileSize {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin-left: 8px;
+  border-radius: 50%;
+}
+
+.removeButton:hover {
+  background-color: #f1f5f9;
+  color: #ef4444;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.currentInvoice {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.currentInvoice p {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.invoiceFile {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+}
+
+.invoiceFile span {
+  margin-right: 5px;
+}
+
+.invoiceFile small {
+  color: #94a3b8;
+  margin-left: 5px;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.cancelButton {
+  padding: 8px 16px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  border-radius: 6px;
+  color: #475569;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  background-color: #f1f5f9;
+}
+
+.uploadButton {
+  padding: 8px 16px;
+  border: none;
+  background-color: #3b82f6;
+  border-radius: 6px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadButton:hover {
+  background-color: #2563eb;
+}
+
+.uploadButton:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}

@@ -4,38 +4,40 @@ import { useEffect, useState } from "react";
 
 const url = process.env.REACT_APP_API_URL || "http://localhost:3000/api";
 
-const fetcher = async (url, options = {}) => {
-  const res = await fetch(url, options);
-  if (!res.ok) {
-    const error = new Error("An error occurred while fetching the data.");
-    error.status = res.status;
-    error.statusText = res.statusText;
-    throw error;
-  }
-  return res.json();
-};
-
 export const useOrders = () => {
-  const options = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      credentials: "include", // Include cookies for authentication
-    },
-  };
+  const { data, error, isLoading, mutate } = useSWR(
+    `${url}/orders`,
+    (url) =>
+      fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }).then((res) => {
+        if (!res.ok) {
+          const error = new Error("An error occurred while fetching the data.");
+          error.status = res.status;
+          error.statusText = res.statusText;
+          throw error;
+        }
 
-  const { data, error, isLoading } = useSWR(
-    [`${url}/orders`, options],
-    fetcher
+        return res.json();
+      }),
+    {
+      // Configure SWR options
+      errorRetryCount: 1,
+      revalidateOnFocus: false,
+      dedupingInterval: 10000,
+      refreshInterval: 30000,
+    }
   );
-  console.log("Data fetched from API:", data);
-  console.log("Error fetching data:", error);
-  console.log("Is loading:", isLoading);
 
   return {
     data,
     error,
     isLoading,
+    mutate,
   };
 };
 
@@ -128,4 +130,35 @@ export const useLoadUser = () => {
     isLoading,
     isOnline, // Return online status so components can show appropriate UI
   };
+};
+
+export const patchOrder = async (orderId, data) => {
+  try {
+    const res = await fetch(`${url}/orders/${orderId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.error("Error updating order:", error);
+  }
+};
+
+export const patchUser = async (userId, data) => {
+  try {
+    const res = await fetch(`${url}/suppliers/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+      credentials: "include",
+    });
+    const result = await res.json();
+    console.log("User updated successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error updating user:", error);
+  }
 };

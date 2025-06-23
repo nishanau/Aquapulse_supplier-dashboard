@@ -2,72 +2,333 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100vh;
-
+    min-height: 100vh;
+    background-color: #f5f7fa;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-.filter {
-    width: 25%;
-    height: 100%;
+.dashboardHeader {
+    background-color: white;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     display: flex;
-    position: sticky;
-    top: 0;
     justify-content: space-between;
-    padding: 0 20px;
-    background-color: #e2e2e2;
+    align-items: center;
+}
+
+.dashboardHeader h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.stats {
+    display: flex;
+    align-items: center;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.statNumber {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3498db;
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: #7f8c8d;
+    margin-top: 0.25rem;
+}
+
+.statDivider {
+    height: 40px;
+    width: 1px;
+    background-color: #e0e0e0;
 }
 
 .dashboard {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 100vh;
+    height: calc(100vh - 100px);
     overflow: hidden;
-    border-top: 2px solid #acacac;
-    overflow-y: scroll;
 }
 
 .dashboardNav {
-    position: sticky;
-    top: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-
-    border-right: 2px solid #acacac;
-    
-    height: 100vh;
-    width: 30%;
-    background-color: #4f8fc0;
-    min-width: 200px;
-
+    width: 250px;
+    background-color: white;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+    padding: 1.5rem 0;
 }
 
 .dashboardNavItem {
-    border-bottom: 2px solid #ffe3b3;
-    width: 100%;
-    transition: transform 0.3s ease;
-    height: 60px;
-    font-size: 18px;
-    color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: center;
-;
-
+    padding: 1rem 1.5rem;
+    color: #718096;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
 }
 
 .dashboardNavItem:hover {
-    background-color: #2772ac;
-    cursor: pointer;
-    transform: scale(1.01);
+    background-color: #f8fafc;
+    color: #3498db;
+}
+
+.navIcon {
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+}
+
+.active {
+    color: #3498db;
+    background-color: #ebf8ff;
+    border-left: 3px solid #3498db;
+}
+
+.badge {
+    background-color: #fc8181;
+    color: white;
+    border-radius: 50%;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    margin-left: auto;
+    padding: 0 0.25rem;
+}
+
+.contentContainer {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
 .dashboardContent {
-
-    padding: 10px;
+    flex: 1;
+    padding: 1.5rem;
     overflow-y: auto;
+}
+
+.contentHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.contentHeader h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.ordersCount {
+    display: flex;
+    align-items: center;
+    gap:20px;
+    background-color: #ebf8ff;
+    color: #3498db;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.loadingState,
+.errorState,
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    text-align: center;
+    color: #718096;
+}
+
+.loadingSpinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #3498db;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.retryButton {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.emptyStateIcon {
+    font-size: 3rem;
+    color: #cbd5e0;
+    margin-bottom: 1rem;
+}
+
+.filter {
+    width: 300px;
+    background-color: white;
+    padding: 1.5rem;
+    border-left: 1px solid #e0e0e0;
+    overflow-y: auto;
+}
+
+.filter h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.filterSection {
+    margin-bottom: 1.5rem;
+}
+
+.filterLabel {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.filterControls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dateInput,
+.selectInput {
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.875rem;
     width: 100%;
-    max-width: 80%;
-    min-width: 600px;
+}
+
+.applyFilter,
+.clearFilter {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%;
+}
+
+.applyFilter {
+    background-color: #3498db;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.clearFilter {
+    background-color: #f7fafc;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .stats {
+        display: none;
+    }
+
+    .dashboardNav {
+        width: 200px;
+    }
+
+    .filter {
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .dashboardNav {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0;
+    }
+
+    .dashboardNavItem {
+        padding: 1rem;
+    }
+
+    .contentContainer {
+        flex-direction: column;
+    }
+
+    .filter {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #e0e0e0;
+    }
+}
+
+.clearFilterBtn {
+    margin-left: 12px;
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.clearFilterBtn:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.dateInput:disabled,
+.selectInput:disabled,
+.applyFilter:disabled,
+.clearFilter:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

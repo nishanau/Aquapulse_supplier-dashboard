@@ -22,3 +22,8 @@
 .logo{
     cursor: pointer;
 }
+
+.active {
+    color: #0076fd;
+    font-weight: bold;
+}
