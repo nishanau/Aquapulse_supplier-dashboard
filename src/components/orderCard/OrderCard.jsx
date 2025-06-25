@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./ordercard.module.css";
 import formatAustralianDate from "@/utils/dateFormatter";
 import {
@@ -15,7 +15,6 @@ import {
   FiCheck,
   FiFile,
   FiX,
-  FiFileText,
 } from "react-icons/fi";
 import { useToast } from "@/provider/ToastProvider";
 import useOrderStore from "@/store/useOrderStore"; // Zustand store for orders

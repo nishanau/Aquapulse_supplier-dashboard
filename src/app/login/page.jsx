@@ -31,12 +31,16 @@ const Login = () => {
     }
     const loginSuccess = await handleLogin(email, password);
 
-    if (loginSuccess) {
+    if (loginSuccess && loginSuccess.success) {
       setIsAuthenticated(true);
-      setUser(loginSuccess.user);
+      setUser(loginSuccess.data.user);
       showToast("Login successful", "success");
       // Redirect to home page or dashboard after successful login
       router.push("/dashboard");
+    } else {
+      showToast("Login failed. Please check your credentials.", "error");
+      setEmailError(true);
+      setPasswordError(true);
     }
   };
 

@@ -49,10 +49,17 @@ export const handleLogin = async (email, password) => {
       body: JSON.stringify({ email, password }),
       credentials: "include",
     });
+
     const data = await res.json();
-    return data;
+
+    if (res.ok) {
+      return { data, success: true };
+    } else {
+      return { data, success: false };
+    }
   } catch (error) {
     console.error("Login Error:", error);
+    return { error, success: false };
   }
 };
 
@@ -147,18 +154,52 @@ export const patchOrder = async (orderId, data) => {
   }
 };
 
-export const patchUser = async (userId, data) => {
+export const patchUser = async (data) => {
   try {
-    const res = await fetch(`${url}/suppliers/${userId}`, {
+    const res = await fetch(`${url}/suppliers`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
       credentials: "include",
     });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      const error = new Error(errorData.message || "Failed to update profile");
+      error.status = res.status;
+      throw error;
+    }
+
     const result = await res.json();
     console.log("User updated successfully:", result);
     return result;
   } catch (error) {
     console.error("Error updating user:", error);
+    throw error; // Re-throw to allow caller to handle it
+  }
+};
+
+export const passwordChange = async (oldPassword, newPassword) => {
+  try {
+    const res = await fetch(`${url}/auth/change-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ oldPassword, newPassword }),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      const error = new Error(errorData.message || "Failed to change password");
+      error.status = res.status;
+      throw error;
+    }
+
+    const result = await res.json();
+    console.log("Password changed successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error changing password:", error);
+    throw error; // Re-throw to allow caller to handle it
   }
 };

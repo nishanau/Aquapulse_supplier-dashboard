@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiFile, FiDownload, FiX } from "react-icons/fi";
-import { getFileUrl } from "@/utils/storageService";
+import { getFileUrl } from "@/utils/s3Service";
 import styles from "./invoiceDisplay.module.css";
 
 const InvoiceDisplay = ({ invoice }) => {

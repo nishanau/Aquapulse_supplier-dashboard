@@ -6,11 +6,16 @@ import styles from "./profile.module.css";
 import Button from "@/components/button/Button";
 import { colors } from "@/utils/colors";
 import Image from "next/image";
+import { passwordChange } from "@/utils/apiService";
+import { uploadFile } from "@/utils/s3Service"; // Assuming you have a utility for S3 uploads
 
 const ProfilePage = () => {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const updateUser = useAuthStore((s) => s.updateUser);
+
   const { showToast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loadSave, setLoadSave] = useState(false);
+  const [loadPassword, setLoadPassword] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(null);
   const [passwordData, setPasswordData] = useState({
@@ -18,6 +23,7 @@ const ProfilePage = () => {
     newPassword: "",
     confirmPassword: "",
   });
+  const [logoPreview, setLogoPreview] = useState(null);
 
   // Tabs for different sections
   const [activeTab, setActiveTab] = useState("personal");
@@ -33,7 +39,6 @@ const ProfilePage = () => {
         logo: user.logo || "",
         serviceAreas: user.serviceAreas || [],
         pricing: user.pricing || [],
-        active: user.active || false,
       });
     }
   }, [user]);
@@ -118,49 +123,149 @@ const ProfilePage = () => {
     setFormData({ ...formData, pricing: updatedPricing });
   };
 
-  const saveProfile = async () => {
-    setIsLoading(true);
-    try {
-      // API call would go here
-      // const response = await fetch('/api/profile', {
-      //   method: 'PUT',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
+  // Update profile
+  // Updated saveProfile function that handles _id fields correctly
 
-      // Mock successful response
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  const saveProfile = async () => {
+    setLoadSave(true);
+    try {
+      // Create an object with only the changed fields
+      const changedFields = {};
+
+      // First, handle the logo upload if there's a new logo to upload
+      if (formData.logo && formData.logo instanceof File) {
+        try {
+          // Upload the logo to S3
+          const logoData = await uploadFile(
+            formData.logo,
+            "logo",
+            {
+              company: formData.company || user.company || `user-${user._id}`,
+            },
+            true // Make logo public
+          );
+
+          // Replace the File object with the uploaded file metadata
+          changedFields.logo = logoData;
+
+          // Also update the form data so UI can reflect the change
+          setFormData((prev) => ({
+            ...prev,
+            logo: logoData,
+          }));
+
+          showToast("Logo uploaded successfully", "success");
+        } catch (error) {
+          showToast(`Failed to upload logo: ${error.message}`, "error");
+          console.error("Logo upload error:", error);
+          // Continue with other profile updates even if logo upload fails
+        }
+      }
+
+      // Compare each field in formData with the original user data
+      Object.keys(formData).forEach((key) => {
+        // Skip logo since we already handled it above
+        if (key === "logo") {
+          // Only add logo to changedFields if we haven't already added it during upload
+          if (
+            !changedFields.logo &&
+            JSON.stringify(formData[key]) !== JSON.stringify(user[key])
+          ) {
+            changedFields[key] = formData[key];
+          }
+        }
+        // Special handling for service areas
+        else if (key === "serviceAreas") {
+          // Check if service areas have changed (ignoring _id fields)
+          const formServiceAreas = formData.serviceAreas.map((area) => {
+            // Create a copy without the _id field
+            const { _id, ...areaWithoutId } = area;
+            return areaWithoutId;
+          });
+
+          const userServiceAreas = user.serviceAreas.map((area) => {
+            // Create a copy without the _id field
+            const { _id, ...areaWithoutId } = area;
+            return areaWithoutId;
+          });
+
+          // Compare the arrays without IDs
+          if (
+            JSON.stringify(formServiceAreas) !==
+            JSON.stringify(userServiceAreas)
+          ) {
+            // Send all service areas without _id fields
+            changedFields.serviceAreas = formServiceAreas;
+          }
+        }
+        // Special handling for pricing tiers
+        else if (key === "pricing") {
+          // Check if pricing tiers have changed (ignoring _id fields)
+          const formPricing = formData.pricing.map((tier) => {
+            // Create a copy without the _id field
+            const { _id, ...tierWithoutId } = tier;
+            return tierWithoutId;
+          });
+
+          const userPricing = user.pricing.map((tier) => {
+            // Create a copy without the _id field
+            const { _id, ...tierWithoutId } = tier;
+            return tierWithoutId;
+          });
+
+          // Compare the arrays without IDs
+          if (JSON.stringify(formPricing) !== JSON.stringify(userPricing)) {
+            // Send all pricing tiers without _id fields
+            changedFields.pricing = formPricing;
+          }
+        }
+        // Simple field comparison
+        else if (formData[key] !== user[key]) {
+          changedFields[key] = formData[key];
+        }
+      });
+
+      // Only make the API call if there are changes
+      if (Object.keys(changedFields).length === 0) {
+        showToast("No changes to save", "info");
+        setEditMode(false);
+        return;
+      }
+
+      // Call the updateUser function with only the changed fields
+      const updatedUser = await updateUser(changedFields);
 
       showToast("Profile updated successfully!", "success");
       setEditMode(false);
     } catch (error) {
-      showToast("Failed to update profile. Please try again.", "error");
+      showToast(
+        `Failed to update profile: ${error.message || "Please try again."}`,
+        "error"
+      );
       console.error("Update error:", error);
     } finally {
-      setIsLoading(false);
+      setLoadSave(false);
     }
   };
 
+  // Update password
   const updatePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       showToast("New passwords do not match", "error");
       return;
     }
 
-    setIsLoading(true);
-    try {
-      // API call would go here
-      // const response = await fetch('/api/change-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     currentPassword: passwordData.currentPassword,
-      //     newPassword: passwordData.newPassword
-      //   })
-      // });
+    if (passwordData.newPassword.length < 8) {
+      showToast("Password must be at least 8 characters long", "error");
+      return;
+    }
 
-      // Mock successful response
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    setLoadPassword(true);
+    try {
+      await passwordChange(
+        passwordData.currentPassword,
+        passwordData.newPassword
+      );
 
       showToast("Password updated successfully!", "success");
       setPasswordData({
@@ -170,13 +275,57 @@ const ProfilePage = () => {
       });
     } catch (error) {
       showToast(
-        "Failed to update password. Please check your current password.",
+        `Failed to update password: ${
+          error.message || "Check your current password."
+        }`,
         "error"
       );
       console.error("Password update error:", error);
     } finally {
-      setIsLoading(false);
+      setLoadPassword(false);
     }
+  };
+
+  // Handle logo upload
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file before setting
+    if (file.size > 5 * 1024 * 1024) {
+      showToast("Logo must be less than 5MB", "error");
+      return;
+    }
+
+    // Validate file type - only images allowed for logos
+    const validTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/svg+xml",
+      "image/webp",
+    ];
+    if (!validTypes.includes(file.type)) {
+      showToast(
+        "Please select a valid image file (JPEG, PNG, SVG, WebP)",
+        "error"
+      );
+      return;
+    }
+
+    // Store the file object directly in formData
+    // We'll handle the actual upload when the user saves the profile
+    setFormData({
+      ...formData,
+      logo: file,
+    });
+
+    // Also create a preview URL for the UI
+    const previewUrl = URL.createObjectURL(file);
+
+    // You might want to store this separately for preview purposes
+    setLogoPreview(previewUrl);
+
+    showToast("Logo selected. Save changes to upload.", "info");
   };
 
   return (
@@ -193,9 +342,9 @@ const ProfilePage = () => {
           <div className={styles.editButtons}>
             <Button
               background={colors.success}
-              name="Save Changes"
+              name={loadSave ? "Saving..." : "Save Changes"}
               clickHandler={saveProfile}
-              disabled={isLoading}
+              disabled={loadSave}
             />
             <Button
               background={colors.secondary}
@@ -213,11 +362,10 @@ const ProfilePage = () => {
                     logo: user.logo || "",
                     serviceAreas: user.serviceAreas || [],
                     pricing: user.pricing || [],
-                    active: user.active || false,
                   });
                 }
               }}
-              disabled={isLoading}
+              disabled={loadSave}
             />
           </div>
         )}
@@ -330,16 +478,7 @@ const ProfilePage = () => {
 
               <div className={styles.field}>
                 <label>Company</label>
-                {editMode ? (
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                  />
-                ) : (
-                  <p>{formData.company}</p>
-                )}
+                <p>{formData.company}</p>
               </div>
 
               <div className={styles.field}>
@@ -347,66 +486,38 @@ const ProfilePage = () => {
                 {editMode ? (
                   <div className={styles.logoUploader}>
                     <input
-                      type="text"
-                      name="logo"
-                      //formData.logo
-                      value="/logo.png"
-                      onChange={handleChange}
-                      placeholder="Enter image URL or upload a file"
-                      className={styles.logoInput}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      className={styles.fileInput}
                     />
-                    <div className={styles.uploadControls}>
-                      <label className={styles.fileInputLabel}>
-                        <span>Upload Image</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            const file = e.target.files[0];
-                            if (file) {
-                              // For real implementation, you'd upload to a server/storage
-                              // and get back a URL. This is a simplified example:
-                              const reader = new FileReader();
-                              reader.onload = (event) => {
-                                setFormData({
-                                  ...formData,
-                                  logo: event.target.result,
-                                });
-                              };
-                              reader.readAsDataURL(file);
-                            }
-                          }}
-                          className={styles.fileInput}
-                        />
-                      </label>
-                      {formData.logo && (
-                        <button
-                          className={styles.clearButton}
-                          onClick={() => setFormData({ ...formData, logo: "" })}
-                          type="button"
-                        >
-                          Clear
-                        </button>
-                      )}
-                    </div>
-                    {formData.logo && (
-                      <div className={styles.previewThumbnail}>
+                    <div className={styles.previewThumbnail}>
+                      {logoPreview ? (
                         <Image
-                          width={200}
-                          height={100}
-                          src="/logo.png"
+                          width={70}
+                          height={50}
+                          src={logoPreview}
                           alt="Logo preview"
                         />
-                      </div>
-                    )}
+                      ) : formData.logo?.downloadURL ? (
+                        <Image
+                          width={70}
+                          height={50}
+                          src={formData.logo.downloadURL}
+                          alt="Current logo"
+                        />
+                      ) : (
+                        <p>No logo selected</p>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className={styles.logoDisplay}>
-                    {formData.logo ? (
+                    {formData.logo?.downloadURL ? (
                       <Image
-                        width={200}
-                        height={100}
-                        src="/logo.png"
+                        width={70}
+                        height={50}
+                        src={formData.logo.downloadURL}
                         alt={`${formData.company} logo`}
                         className={styles.logoImage}
                       />
@@ -426,7 +537,16 @@ const ProfilePage = () => {
             {formData.logo && (
               <div className={styles.logoPreview}>
                 <h3>Logo Preview</h3>
-                <img src={formData.logo} alt={`${formData.company} logo`} />
+                <Image
+                  width={700}
+                  height={400}
+                  src={
+                    formData.logo.downloadURL
+                      ? formData.logo.downloadURL
+                      : logoPreview
+                  }
+                  alt={`${formData.company} logo`}
+                />
               </div>
             )}
           </div>
@@ -693,10 +813,10 @@ const ProfilePage = () => {
 
               <Button
                 background={colors.primary}
-                name="Update Password"
+                name={loadPassword ? "Updating..." : "Update Password"}
                 clickHandler={updatePassword}
                 disabled={
-                  isLoading ||
+                  loadPassword ||
                   !passwordData.currentPassword ||
                   !passwordData.newPassword ||
                   !passwordData.confirmPassword

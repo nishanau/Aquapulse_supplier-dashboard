@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { FiUpload, FiX, FiFile, FiDownload } from "react-icons/fi";
-import { uploadFile, deleteIfExists } from "@/utils/storageService";
+import { uploadFile, deleteIfExists } from "@/utils/s3Service";
 import styles from "./invoiceModal.module.css";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -49,7 +49,11 @@ const InvoiceModal = ({ order, onClose, onUploadSuccess }) => {
       // Upload file to S3 with invoice path
       const fileData = await uploadFile(
         selectedFile,
-        `invoices/${user.company}/${order.orderNumber}`,
+        `invoice`,
+        {
+          company: user.company,
+          orderNumber: order.orderNumber,
+        },
         true
       );
 

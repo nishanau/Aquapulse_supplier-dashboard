@@ -9,35 +9,49 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 const BUCKET_NAME = process.env.NEXT_PUBLIC_AWS_S3_BUCKET;
 
 /**
- * Upload a file to AWS S3
+ * Upload a file to AWS S3 with improved directory structure
  * @param {File} file - The file to upload
- * @param {string} path - Path in S3 (e.g., "invoices")
+ * @param {string} fileType - Type of file ("logo" or "invoice")
+ * @param {Object} metadata - Additional metadata (company, orderNumber, etc.)
  * @param {boolean} makePublic - Whether to make the file publicly accessible
  * @returns {Promise<Object>} File metadata including download URL
  */
-export const uploadFile = async (file, path, makePublic = false) => {
+export const uploadFile = async (file, fileType, metadata, makePublic = false) => {
   try {
-    // Create a unique key for the file
-    const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-
-    // If makePublic is true, ensure the path starts with "public/"
-    let key;
-    if (makePublic) {
-      // Ensure path starts with "public/"
-      key = path.startsWith("public/")
-        ? `${path}/${fileName}`
-        : `public/${path}/${fileName}`;
-    } else {
-      key = `${path}/${fileName}`;
+    if (!file) throw new Error("No file provided");
+    if (!metadata.company) throw new Error("Company name is required for file organization");
+    
+    // Sanitize company name for use in paths
+    const sanitizedCompany = metadata.company.replace(/\s+/g, "-").toLowerCase();
+    
+    // Create a unique filename with timestamp
+    const uniqueFilename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
+    
+    // Determine the appropriate path based on file type
+    let filePath;
+    switch(fileType.toLowerCase()) {
+      case 'logo':
+        // Logos: public/supplier/[company]/logo/
+        filePath = `public/supplier/${sanitizedCompany}/logo/${uniqueFilename}`;
+        makePublic = true; // Logos should always be public
+        break;
+      case 'invoice':
+        // Invoices: public/supplier/[company]/invoices/[orderNumber]/
+        if (!metadata.orderNumber) throw new Error("Order number is required for invoice uploads");
+        filePath = `public/supplier/${sanitizedCompany}/invoices/${metadata.orderNumber}/${uniqueFilename}`;
+        break;
+      default:
+        // Generic uploads with type as subfolder
+        filePath = `public/supplier/${sanitizedCompany}/${fileType.toLowerCase()}/${uniqueFilename}`;
     }
 
     // Convert file to binary data
     const fileData = await file.arrayBuffer();
 
-    // Create upload command - only add ACL for public files
+    // Create upload command
     const uploadCommand = new PutObjectCommand({
       Bucket: BUCKET_NAME,
-      Key: key,
+      Key: filePath,
       Body: Buffer.from(fileData),
       ContentType: file.type,
       ContentDisposition: `attachment; filename="${file.name}"`,
@@ -50,12 +64,12 @@ export const uploadFile = async (file, path, makePublic = false) => {
     let downloadURL;
     if (makePublic) {
       // Direct URL for public files
-      downloadURL = `https://${BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${key}`;
+      downloadURL = `https://${BUCKET_NAME}.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${filePath}`;
     } else {
-      // Pre-signed URL for private files
+      // Pre-signed URL for private files (expires in 1 hour)
       const getCommand = new GetObjectCommand({
         Bucket: BUCKET_NAME,
-        Key: key,
+        Key: filePath,
       });
       downloadURL = await getSignedUrl(s3Client, getCommand, {
         expiresIn: 3600,
@@ -65,12 +79,12 @@ export const uploadFile = async (file, path, makePublic = false) => {
     // Return file metadata
     return {
       fileName: file.name,
-      filePath: key,
-      downloadURL,
+      filePath: filePath,
       contentType: file.type,
       size: file.size,
-      uploadedAt: new Date().toISOString(),
+      downloadURL: downloadURL,
       isPublic: makePublic,
+      uploadedAt: new Date().toISOString(),
     };
   } catch (error) {
     console.error("Error uploading file to S3:", error);
