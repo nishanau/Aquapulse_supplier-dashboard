@@ -37,7 +37,11 @@ const ProfilePage = () => {
         phoneNumber: user.phoneNumber || "",
         company: user.company || "",
         logo: user.logo || "",
-        serviceAreas: user.serviceAreas || [],
+        serviceAreas: (user.serviceAreas || []).map((area) => ({
+          ...area,
+          // Add a helper field for editing postal codes as a string
+          postalCodesInput: (area.postalCodes || []).join(", "),
+        })),
         pricing: user.pricing || [],
       });
     }
@@ -65,25 +69,21 @@ const ProfilePage = () => {
 
   const handleServiceAreaChange = (index, field, value) => {
     const updatedAreas = [...formData.serviceAreas];
-    updatedAreas[index] = { ...updatedAreas[index], [field]: value };
-    setFormData({ ...formData, serviceAreas: updatedAreas });
-  };
-
-  const handlePostalCodeChange = (areaIndex, value) => {
-    const updatedAreas = [...formData.serviceAreas];
-    // Split by commas, trim whitespace, and filter out empty strings
-    const postalCodes = value
-      .split(",")
-      .map((code) => code.trim())
-      .filter((code) => code);
-    updatedAreas[areaIndex] = { ...updatedAreas[areaIndex], postalCodes };
+    if (field === "postalCodesInput") {
+      updatedAreas[index] = {
+        ...updatedAreas[index],
+        postalCodesInput: value,
+      };
+    } else {
+      updatedAreas[index] = { ...updatedAreas[index], [field]: value };
+    }
     setFormData({ ...formData, serviceAreas: updatedAreas });
   };
 
   const addServiceArea = () => {
     const updatedAreas = [
       ...formData.serviceAreas,
-      { region: "", postalCodes: [] },
+      { region: "", postalCodes: [], postalCodesInput: "" },
     ];
     setFormData({ ...formData, serviceAreas: updatedAreas });
   };
@@ -178,9 +178,16 @@ const ProfilePage = () => {
         else if (key === "serviceAreas") {
           // Check if service areas have changed (ignoring _id fields)
           const formServiceAreas = formData.serviceAreas.map((area) => {
-            // Create a copy without the _id field
-            const { _id, ...areaWithoutId } = area;
-            return areaWithoutId;
+            // Create a copy without the _id and postalCodesInput fields
+            const { _id, postalCodesInput, ...areaWithoutId } = area;
+            // Use postalCodesInput to generate postalCodes array
+            return {
+              ...areaWithoutId,
+              postalCodes: (postalCodesInput || "")
+                .split(",")
+                .map((code) => code.trim())
+                .filter((code) => code),
+            };
           });
 
           const userServiceAreas = user.serviceAreas.map((area) => {
@@ -600,9 +607,13 @@ const ProfilePage = () => {
                     {editMode ? (
                       <input
                         type="text"
-                        value={area.postalCodes.join(", ")}
+                        value={area.postalCodesInput ?? area.postalCodes.join(", ")}
                         onChange={(e) =>
-                          handlePostalCodeChange(index, e.target.value)
+                          handleServiceAreaChange(
+                            index,
+                            "postalCodesInput",
+                            e.target.value
+                          )
                         }
                       />
                     ) : (

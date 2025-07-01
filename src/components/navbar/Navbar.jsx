@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/provider/ToastProvider";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 const Navbar = () => {
   const { isAuthenticated, user, logout, isLoading } = useAuthStore();
   const { showToast } = useToast();
@@ -47,7 +48,20 @@ const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.logo}>{user ? user.company : "Logo"}</div>
+      <div className={styles.logoDiv}>
+        {isAuthenticated && user && user.logo && (
+          <div className={styles.logoImageDiv}>
+            <Image
+              style={styles.logoImage}
+              src={user.logo.downloadURL}
+              alt="Logo"
+              fill
+            />
+          </div>
+        )}
+
+        <h2>{isAuthenticated && user ? user.company : "AquaPulse"}</h2>
+      </div>
 
       <div className={styles.links}>
         {isAuthenticated && !isLoading
@@ -67,7 +81,9 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`${styles.link} ${pathname === link.href ? styles.active : ""}`}
+                    className={`${styles.link} ${
+                      pathname === link.href ? styles.active : ""
+                    }`}
                   >
                     {link.label}
                   </Link>

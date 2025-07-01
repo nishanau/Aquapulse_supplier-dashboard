@@ -69,10 +69,10 @@ export const handleLogout = async () => {
       method: "POST",
       credentials: "include",
     });
-    const data = await res.json();
-    return data;
+    return res.ok;
   } catch (error) {
     console.error("Logout Error:", error);
+    return false;
   }
 };
 
@@ -148,6 +148,7 @@ export const patchOrder = async (orderId, data) => {
       credentials: "include",
     });
     const result = await res.json();
+    console.log("Order updated successfully:", result);
     return result;
   } catch (error) {
     console.error("Error updating order:", error);
@@ -201,5 +202,87 @@ export const passwordChange = async (oldPassword, newPassword) => {
   } catch (error) {
     console.error("Error changing password:", error);
     throw error; // Re-throw to allow caller to handle it
+  }
+};
+
+export const registerSupplier = async (supplierData) => {
+  try {
+    const res = await fetch(`${url}/auth/register-supplier`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(supplierData),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      return { data, success: true };
+    } else {
+      return { data, success: false };
+    }
+  } catch (error) {
+    console.error("Registration Error:", error);
+    return { error, success: false };
+  }
+};
+
+export const verifyEmail = async (token, email) => {
+  try {
+    const res = await fetch(`${url}/auth/verify-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, token }),
+    });
+    const data = await res.json();
+    return { data, success: res.ok };
+  } catch (error) {
+    console.error("Email Verification Error:", error);
+    return { error, success: false };
+  }
+};
+
+
+export const sendForgotPasswordCode = async (email) => {
+  try {
+    const res = await fetch(`${url}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json();
+    return { data, success: res.ok };
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    return { error, success: false };
+  }
+};
+
+export const verifyForgotPasswordCode = async (email, code) => {
+  try {
+    const res = await fetch(`${url}/auth/verify-reset-code`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code }),
+    });
+    const data = await res.json();
+    return { data, success: res.ok };
+  } catch (error) {
+    console.error("Verify Reset Code Error:", error);
+    return { error, success: false };
+  }
+};
+
+export const resetPasswordWithCode = async (email, code, newPassword) => {
+  try {
+    const res = await fetch(`${url}/auth/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, code, newPassword }),
+    });
+    const data = await res.json();
+    return { data, success: res.ok };
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    return { error, success: false };
   }
 };

@@ -4,7 +4,13 @@ import { useEffect } from "react";
 import OrderCard from "@/components/orderCard/OrderCard";
 import styles from "./dashboard.module.css";
 import { useOrders } from "@/utils/apiService";
-import { FiPackage, FiCheckCircle, FiCalendar, FiCheck, FiFilter } from "react-icons/fi";
+import {
+  FiPackage,
+  FiCheckCircle,
+  FiCalendar,
+  FiCheck,
+  FiFilter,
+} from "react-icons/fi";
 import useOrderStore from "@/store/useOrderStore"; // Zustand store for orders
 
 const Page = () => {
@@ -282,16 +288,16 @@ const Page = () => {
             <div className={styles.filterSection}>
               <label className={styles.filterLabel}>Date Range</label>
               <div className={styles.filterControls}>
-                <input 
-                  type="date" 
-                  className={styles.dateInput} 
+                <input
+                  type="date"
+                  className={styles.dateInput}
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                 />
                 <span>to</span>
-                <input 
-                  type="date" 
-                  className={styles.dateInput} 
+                <input
+                  type="date"
+                  className={styles.dateInput}
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   min={startDate} // Ensures end date is after start date
@@ -302,7 +308,7 @@ const Page = () => {
             <div className={styles.filterSection}>
               <label className={styles.filterLabel}>Order Volume</label>
               <div className={styles.filterControls}>
-                <select 
+                <select
                   className={styles.selectInput}
                   value={volumeFilter}
                   onChange={(e) => setVolumeFilter(e.target.value)}
@@ -315,14 +321,14 @@ const Page = () => {
               </div>
             </div>
 
-            <button 
+            <button
               className={styles.applyFilter}
               onClick={handleApplyFilter}
               disabled={!startDate && !endDate && !volumeFilter}
             >
               Apply Filters
             </button>
-            <button 
+            <button
               className={styles.clearFilter}
               onClick={handleClearFilter}
               disabled={!isFiltered && !startDate && !endDate && !volumeFilter}
