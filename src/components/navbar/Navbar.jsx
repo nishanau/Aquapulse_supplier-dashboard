@@ -48,11 +48,17 @@ const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.logoDiv}>
+      <div
+        className={styles.logoDiv}
+        onClick={() => {
+          isAuthenticated ? router.push("/dashboard") :
+          router.push("/");
+        }}
+      >
         {isAuthenticated && user && user.logo && (
           <div className={styles.logoImageDiv}>
             <Image
-              style={styles.logoImage}
+              className={styles.logoImage}
               src={user.logo.downloadURL}
               alt="Logo"
               fill
@@ -60,7 +66,7 @@ const Navbar = () => {
           </div>
         )}
 
-        <h2>{isAuthenticated && user ? user.company : "AquaPulse"}</h2>
+        <h3>{isAuthenticated && user ? user.company : "AquaPulse"}</h3>
       </div>
 
       <div className={styles.links}>

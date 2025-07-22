@@ -2,11 +2,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 24px;
   gap: 20px;
-  height: 60px;
+  height: 70px;
   color: rgb(255, 255, 255);
-  background-color: #313866;
+  background: linear-gradient(90deg, #2c3e50 0%, #1a2a3a 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 

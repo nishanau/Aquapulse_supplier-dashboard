@@ -1,11 +1,249 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.title {
-  font-size: 2rem;
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.heroContent {
+  max-width: 900px;
+  text-align: center;
+  z-index: 2;
+}
+
+.logoContainer {
+  margin-bottom: 2rem;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #1976d2;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.heroSubtitle {
+  font-size: 1.4rem;
+  color: #546e7a;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+/* Benefits Section */
+.benefits {
+  padding: 5rem 2rem;
+  background: #fff;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 3rem;
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.benefitCard {
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-bottom: 4px solid #1976d2;
+}
+
+.benefitCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.benefitIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.benefitCard h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 0.8rem;
+}
+
+.benefitCard p {
+  font-size: 1rem;
+  color: #546e7a;
+  line-height: 1.5;
+}
+
+/* How It Works Section */
+.howItWorks {
+  padding: 5rem 2rem;
+  background: #f5f9ff;
+}
+
+.stepsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  width: 250px;
+}
+
+.stepNumber {
+  background: #1976d2;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.step h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 0.8rem;
+}
+
+.step p {
+  color: #546e7a;
+  line-height: 1.5;
+}
+
+.stepConnector {
+  flex-grow: 0;
+  height: 4px;
+  background: #1976d2;
+  width: 80px;
+}
+
+/* Testimonials */
+.testimonials {
+  padding: 5rem 2rem;
+  background: #fff;
+}
+
+.testimonialCards {
+  display: flex;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.testimonialCard {
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  flex: 1;
+  min-width: 300px;
+  max-width: 450px;
+  position: relative;
+}
+
+.testimonialCard p {
+  font-style: italic;
+  color: #455a64;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.testimonialAuthor {
+  font-weight: 600;
+  color: #1976d2;
+  text-align: right;
+}
+
+/* Call to Action */
+.callToAction {
+  background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.callToAction h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.callToAction p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+  
+  .stepConnector {
+    width: 40px;
+  }
+  
+  .stepsContainer {
+    flex-direction: column;
+  }
+  
+  .stepConnector {
+    width: 4px;
+    height: 40px;
+  }
 }
